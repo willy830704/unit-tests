@@ -4,45 +4,47 @@
 typedef struct List_node {
     int value;
     struct List_node *next;
-} List_node;
-
-typedef struct List_node List;
+} List;
 
 List *swap(List *head, List *node_1, List *node_2)
 {
-    if (!head &&
-        (node_1 == NULL) && (node_2 == NULL) &&
+    if (!head ||
+        (node_1 == NULL) || (node_2 == NULL) ||
         (node_1 == node_2))
-        return head;
+        return head; //&& ---> || not need to swap
 
     int num_pre_node_1_and_node_2 = 0;
 
     List *_head = head;
-    List *pre_node_1,*pre_node_2,*tmp_node;
+    List *pre_node_1 = NULL;
+    List *pre_node_2 = NULL;
+    List *tmp_node = NULL;
 
-    while (head && head->next) {
-        if (head->next == node_1) {
-            pre_node_1 = head;
-            num_pre_node_1_and_node_2 = num_pre_node_1_and_node_2 + 1;
-        }
-
-        if (head->next == node_2) {
-            pre_node_2 = head;
-            num_pre_node_1_and_node_2 = num_pre_node_1_and_node_2 + 1;
-        }
-        head = head->next;
-    }
-
-    head = _head;
+    /*先檢查head*/
     if (head == node_1) {
         pre_node_1 = NULL;
         num_pre_node_1_and_node_2 = num_pre_node_1_and_node_2 + 1;
-    }
-
-    if (head == node_2) {
+    }else if (head == node_2) {
         pre_node_2 = NULL;
         num_pre_node_1_and_node_2 = num_pre_node_1_and_node_2 + 1;
     }
+    /*再檢查後面*/
+    while (head && head->next) { /*原本無論如何都會搜尋整串*/
+        if (head->next == node_1) {
+            pre_node_1 = head;
+            num_pre_node_1_and_node_2 = num_pre_node_1_and_node_2 + 1;
+        }else if (head->next == node_2) {
+            pre_node_2 = head;
+            num_pre_node_1_and_node_2 = num_pre_node_1_and_node_2 + 1;
+        }
+	if(num_pre_node_1_and_node_2 == 2) 
+	    break; //如果兩個都找到了就可以不用找了
+        head = head->next;
+    }
+
+   
+    head = _head;
+   
 
     if (num_pre_node_1_and_node_2 != 2)
         return head;
@@ -63,6 +65,7 @@ List *swap(List *head, List *node_1, List *node_2)
         return node_1;
     }
 
+    /* 
     if (node_2->next == node_1) {
         pre_node_2->next = node_1;
         tmp_node = node_1->next;
@@ -78,11 +81,12 @@ List *swap(List *head, List *node_1, List *node_2)
         node_1->next = tmp_node;
         return head;
     }
-
+    */
+    /*下面這段code可以一併處理兩節點相鄰的情況*/
     pre_node_1->next = node_2;
+    pre_node_2->next = node_1;
     tmp_node = node_2->next;
     node_2->next = node_1->next;
-    pre_node_2->next = node_1;
     node_1->next = tmp_node;
     return head;
 }

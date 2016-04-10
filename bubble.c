@@ -8,33 +8,20 @@ void bubble_sort(List **head)
 
     int num_list = 0;
     int i = 0;
-    int sub_i;
-    int sub_for_times;
-    int sub_for_Max;
+  
     List **pre_sub_head = head;
     List *sub_head;
 
     sub_head = *head;
 
-    for (; sub_head && sub_head->next;) {
-        if (sub_head->value < sub_head->next->value) {
-            sub_head = swap(sub_head,sub_head,sub_head->next);
-            *pre_sub_head = sub_head;
-        }
-
-        num_list = num_list + 1;
-        pre_sub_head = &((*pre_sub_head)->next);
-        sub_head = sub_head->next;
+    for (; sub_head ;sub_head = sub_head->next) {
+        num_list = num_list + 1;	        
     }
 
-    sub_for_times = num_list - 1;
-
-    for (*head && (*head)->next; i < sub_for_times; i++) {
+    for (i=num_list-1; i > 0; i--) {
         sub_head = *head;
-        sub_for_Max = num_list - (i + 1);
         pre_sub_head = head;
-        for (sub_i = 0; sub_head && sub_head->next && (sub_i < sub_for_Max);
-             sub_i++) {
+        for (int j= 0; j < i; j++) {
             if (sub_head->value < sub_head->next->value) {
                 sub_head = swap(sub_head,sub_head,sub_head->next);
                 *pre_sub_head = sub_head;
